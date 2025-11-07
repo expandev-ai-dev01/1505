@@ -1,16 +1,18 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { APPLICATION_ROUTES } from '@/core/constants';
+import { useCartStore } from '@/domain/cart/stores/cartStore';
 import { Button } from '@/core/components';
 
 /**
  * @component Header
- * @summary Application header with navigation
+ * @summary Application header with navigation and cart counter
  * @domain layout
  * @type layout-component
  * @category navigation
  */
 export const Header = () => {
   const navigate = useNavigate();
+  const totalItems = useCartStore((state) => state.getTotalItems());
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white">
@@ -33,8 +35,18 @@ export const Header = () => {
           >
             Catálogo
           </Link>
-          <Button variant="outline" size="sm" onClick={() => navigate(APPLICATION_ROUTES.CART)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate(APPLICATION_ROUTES.CART)}
+            className="relative"
+          >
             🛒 Carrinho
+            {totalItems > 0 && (
+              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-600 text-xs font-bold text-white">
+                {totalItems}
+              </span>
+            )}
           </Button>
         </nav>
       </div>
